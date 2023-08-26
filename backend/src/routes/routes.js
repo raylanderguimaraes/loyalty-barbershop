@@ -11,4 +11,6 @@ router.get("/", (req, res) => {
 // rota lista todos clients
 router.get("/clients", clientsController.getAll);
 
+router.post("/admin/add-client", clientsController.addClient);
+
 module.exports = router;

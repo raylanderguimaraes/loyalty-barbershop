@@ -5,9 +5,8 @@ const app = express();
 const router = require("./routes/routes");
 
 // faz com que o app utilize a rota de acordo com o que é requisitado pelo arquivo de rotas routes.js
+app.use(express.json());
 app.use(router);
-
-
 
 module.exports = app;
 
@@ -18,5 +17,4 @@ module.exports = app;
 // INSERT INTO admin (name, email, password)
 // VALUES ('Nome do Admin', 'admin@email.com', 'senha456');
 
-// INSERT INTO clients (name, email, password, dateOfBirthday, phone, haircutsCompleted, adminId)
-// VALUES ('Raylander', 'raylander.@gmail.com', 'senha123', '1992-08-07', '123456789', 0, 1);
+
