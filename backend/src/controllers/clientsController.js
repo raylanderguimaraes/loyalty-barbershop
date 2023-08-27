@@ -21,7 +21,27 @@ const addClient = async (req, res) => {
   }
 };
 
+const deleteClientById = async (req, res) => {
+  const clientDeletedId = req.params.id;
+
+  try {
+    isDeleted = await clientsModel.deleteClientById(clientDeletedId);
+
+    if (isDeleted) {
+      res.status(200).json({ message: "CLiente exluído com sucesso." });
+    } else {
+      res
+        .status(404)
+        .json({ message: "Cliente não encontrado ou não pôde ser excluído" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erro ao excluir cliente." });
+  }
+};
+
 module.exports = {
   getAll,
   addClient,
+  deleteClientById,
 };

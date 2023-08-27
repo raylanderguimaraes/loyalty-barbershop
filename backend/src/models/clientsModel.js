@@ -20,10 +20,17 @@ const addClient = async (clientData) => {
   ];
 
   const [result] = await connection.execute(query, values);
-  return result.insertId;
+  return result;
+};
+
+const deleteClientById = async (clientId) => {
+  const query = "DELETE FROM clients WHERE id = ?";
+  const [result] = await connection.execute(query, [clientId]);
+  return result.affectedRows > 0;
 };
 
 module.exports = {
   getAll,
   addClient,
+  deleteClientById,
 };

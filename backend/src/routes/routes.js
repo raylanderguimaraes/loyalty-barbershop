@@ -12,5 +12,5 @@ router.get("/", (req, res) => {
 router.get("/clients", clientsController.getAll);
 
 router.post("/admin/add-client", clientsController.addClient);
-
+router.delete("/admin/clients/:id", clientsController.deleteClientById);
 module.exports = router;
