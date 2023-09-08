@@ -26,7 +26,6 @@ const deleteClientById = async (req, res) => {
 
   try {
     isDeleted = await clientsModel.deleteClientById(clientDeletedId);
-
     if (isDeleted) {
       res.status(200).json({ message: "CLiente exluído com sucesso." });
     } else {
@@ -40,8 +39,28 @@ const deleteClientById = async (req, res) => {
   }
 };
 
+const editClientById = async (req, res) => {
+  const clientId = req.params.id;
+  const clientData = req.body;
+
+  try {
+    const isEdited = await clientsModel.editClientById(clientId, clientData);
+    if (isEdited) {
+      res.status(200).json({ message: "Cliente editado com sucesso." });
+    } else {
+      res
+        .status(404)
+        .json({ message: "Cliente não encontrado ou não pôde ser editado" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Erro ao editar cliente." });
+  }
+};
+
 module.exports = {
   getAll,
   addClient,
   deleteClientById,
+  editClientById,
 };

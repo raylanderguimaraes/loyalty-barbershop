@@ -20,7 +20,7 @@ const addClient = async (clientData) => {
   ];
 
   const [result] = await connection.execute(query, values);
-  return result;
+  return result.insertId;
 };
 
 const deleteClientById = async (clientId) => {
@@ -29,8 +29,42 @@ const deleteClientById = async (clientId) => {
   return result.affectedRows > 0;
 };
 
+const editClientById = async (clientId, clientData) => {
+  const query = `
+    UPDATE clients 
+    SET 
+      name = ?,
+      email = ?,
+      password = ?,
+      dateOfBirthday = ?,
+      phone = ?,
+      haircutsCompleted = ?,
+      adminId = ?
+    WHERE id = ?
+  `;
+  const values = [
+    clientData.name,
+    clientData.email,
+    clientData.password,
+    clientData.dateOfBirthday,
+    clientData.phone,
+    clientData.haircutsCompleted,
+    clientData.adminId,
+    clientId,
+  ];
+
+  try {
+    const [result] = await connection.execute(query, values);
+    return result.affectedRows > 0;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 module.exports = {
   getAll,
   addClient,
   deleteClientById,
+  editClientById,
 };

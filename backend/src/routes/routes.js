@@ -11,6 +11,9 @@ router.get("/", (req, res) => {
 // rota lista todos clients
 router.get("/clients", clientsController.getAll);
 
+// rotas para editar os clients
 router.post("/admin/add-client", clientsController.addClient);
 router.delete("/admin/clients/:id", clientsController.deleteClientById);
+router.put("/admin/clients/:id", clientsController.editClientById);
+
 module.exports = router;
