@@ -37,7 +37,6 @@ const deleteClientById = async (req, res) => {
   }
 };
 
-
 const editClientById = async (req, res) => {
   const clientId = req.params.id;
   const clientData = req.body;
@@ -55,6 +54,8 @@ const editClientById = async (req, res) => {
     res.status(500).json({ message: "Erro ao editar cliente." });
   }
 };
+
+
 
 module.exports = {
   getAll,

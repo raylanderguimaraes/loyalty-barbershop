@@ -57,6 +57,10 @@ const editClientById = async (clientId, updateFields) => {
   }
 };
 
+
+
+
+
 module.exports = {
   getAll,
   addClient,
