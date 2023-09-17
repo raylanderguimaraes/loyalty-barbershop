@@ -2,11 +2,14 @@
 const express = require("express");
 const router = express.Router();
 const clientsController = require("../controllers/clientsController");
-
+const adminsController = require("../controllers/adminController");
 // rota padrao home
 router.get("/", (req, res) => {
   res.status(200).send("Olá, mundo!");
 });
+
+// rota lista todos os admins
+router.get("/admins", adminsController.getAllAdmins);
 
 // rota lista todos clients
 router.get("/clients", clientsController.getAll);

@@ -9,7 +9,6 @@ const getAll = async (req, res) => {
 
 const addClient = async (req, res) => {
   const newClientData = req.body;
-
   try {
     const insertId = await clientsModel.addClient(newClientData);
     res
@@ -23,7 +22,6 @@ const addClient = async (req, res) => {
 
 const deleteClientById = async (req, res) => {
   const clientDeletedId = req.params.id;
-
   try {
     isDeleted = await clientsModel.deleteClientById(clientDeletedId);
     if (isDeleted) {
@@ -39,10 +37,10 @@ const deleteClientById = async (req, res) => {
   }
 };
 
+
 const editClientById = async (req, res) => {
   const clientId = req.params.id;
   const clientData = req.body;
-
   try {
     const isEdited = await clientsModel.editClientById(clientId, clientData);
     if (isEdited) {

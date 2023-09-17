@@ -19,43 +19,38 @@ const addClient = async (clientData) => {
     clientData.adminId,
   ];
 
-  const [result] = await connection.execute(query, values);
-  return result.insertId;
+  const [addedClient] = await connection.execute(query, values);
+  return addedClient.insertId;
 };
 
 const deleteClientById = async (clientId) => {
   const query = "DELETE FROM clients WHERE id = ?";
-  const [result] = await connection.execute(query, [clientId]);
-  return result.affectedRows > 0;
+  const [deletedClient] = await connection.execute(query, [clientId]);
+  return deletedClient.affectedRows > 0;
 };
 
-const editClientById = async (clientId, clientData) => {
+
+const editClientById = async (clientId, updateFields) => {
+  // Checa se algum campo foi alterado
+  if (!updateFields || Object.keys(updateFields).length === 0) {
+    throw new Error("Nenhum campo de atualização fornecido.");
+  }
+
+  // Constroi uma consulta SQL dinamicamente com base nos campos de atualização
+  const fieldNames = Object.keys(updateFields);
+  const fieldValues = fieldNames.map((fieldName) => updateFields[fieldName]);
+  const setClauses = fieldNames.map((fieldName) => `${fieldName}=?`).join(", ");
+
   const query = `
     UPDATE clients 
-    SET 
-      name = ?,
-      email = ?,
-      password = ?,
-      dateOfBirthday = ?,
-      phone = ?,
-      haircutsCompleted = ?,
-      adminId = ?
+    SET ${setClauses}
     WHERE id = ?
   `;
-  const values = [
-    clientData.name,
-    clientData.email,
-    clientData.password,
-    clientData.dateOfBirthday,
-    clientData.phone,
-    clientData.haircutsCompleted,
-    clientData.adminId,
-    clientId,
-  ];
+  const values = [...fieldValues, clientId];
 
   try {
-    const [result] = await connection.execute(query, values);
-    return result.affectedRows > 0;
+    const [editedClient] = await connection.execute(query, values);
+    return editedClient.affectedRows > 0;
   } catch (error) {
     console.log(error);
     throw error;
