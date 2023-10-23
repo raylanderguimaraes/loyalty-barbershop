@@ -17,7 +17,23 @@ const createAdmin = async (req, res) => {
   }
 };
 
+const login = async(req, res)=>{
+  let email = req.body.email;
+  let password = req.body.password;
+  try {
+    const isLoged = await adminModel.login(email, password);
+    if(isLoged){
+      res.status(200).send("Usuário Logado")
+    } else {
+      res.status(401).json({ error: 'Credenciais inválidas' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Erro no servidor' });
+  }
+}
+
 module.exports = {
   getAllAdmins,
-  createAdmin
+  createAdmin,
+  login
 };
