@@ -12,6 +12,7 @@ router.get("/", (req, res) => {
 router.get("/admins", adminsController.getAllAdmins);
 
 // rotas para criar, editar e deletar admins
+router.post("/login", adminsController.login);
 router.post("/admin/create", adminsController.createAdmin);
 
 // rota lista todos clients
