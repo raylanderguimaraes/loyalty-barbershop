@@ -23,6 +23,21 @@ const addClient = async (clientData) => {
   return addedClient.insertId;
 };
 
+const login = async (email, password) => {
+  const [client] = await connection.execute(
+    "SELECT * from clients WHERE email = ? AND password = ? ",
+    [email, password]
+  );
+  if (client.length > 0) {
+    return client[0];
+  } else {
+    return null;
+  }
+};
+
+
+
+
 const deleteClientById = async (clientId) => {
   const query = "DELETE FROM clients WHERE id = ?";
   const [deletedClient] = await connection.execute(query, [clientId]);
@@ -66,4 +81,5 @@ module.exports = {
   addClient,
   deleteClientById,
   editClientById,
+  login
 };
