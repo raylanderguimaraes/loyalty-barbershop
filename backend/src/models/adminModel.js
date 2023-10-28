@@ -1,9 +1,6 @@
 const connection = require("./connection");
 
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-
-
 
 const getAllAdmins = async () => {
   const [admins] = await connection.execute("SELECT * from admin ");
@@ -12,13 +9,19 @@ const getAllAdmins = async () => {
 
 const login = async (email, password) => {
   const [admin] = await connection.execute(
-    "SELECT * from admin WHERE email = ? AND password = ? ",
-    [email, password]
+    "SELECT * from admin WHERE email = ?",
+    [email]
   );
-  if (admin.length > 0) {
-    return admin[0];
-  } else {
+  if (admin.length === 0) {
     return null;
+  }
+  const storedPassword = admin[0].password;
+  const isPasswordMatch = await bcrypt.compare(password, storedPassword);
+
+  if (!isPasswordMatch) {
+    return null;
+  } else {
+    return admin[0];
   }
 };
 
