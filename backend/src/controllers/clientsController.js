@@ -1,16 +1,25 @@
 // cria um controlador que vai chamar a funcao getAll no clientsModel que tem acesso direto ao DB e retorna os clientes
 
 const clientsModel = require("../models/clientsModel");
+const jwt = require("jsonwebtoken");
 
 const getAll = async (req, res) => {
-  const clients = await clientsModel.getAll();
+  const token =
+    req.headers.authorization && req.headers.authorization.split(" ")[1];
+  const decoded = jwt.verify(token, process.env.SECRET);
+  const adminId = decoded.id;
+  const clients = await clientsModel.getAll(adminId);
   return res.status(200).json(clients);
 };
 
 const addClient = async (req, res) => {
   const newClientData = req.body;
   try {
-    const insertId = await clientsModel.addClient(newClientData);
+    const token =
+      req.headers.authorization && req.headers.authorization.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.SECRET);
+    const adminId = decoded.id; // Obtém o ID do admin do token
+    const insertId = await clientsModel.addClient(newClientData, adminId);
     res
       .status(201)
       .json({ message: "CLiente adicionado com sucesso.", insertId });
@@ -25,7 +34,7 @@ const deleteClientById = async (req, res) => {
   try {
     isDeleted = await clientsModel.deleteClientById(clientDeletedId);
     if (isDeleted) {
-      res.status(200).json({ message: "CLiente exluído com sucesso." });
+      res.status(200).json({ message: "Cliente exluído com sucesso." });
     } else {
       res
         .status(404)
@@ -55,9 +64,28 @@ const editClientById = async (req, res) => {
   }
 };
 
+const updateHaircuts = async (req, res) => {
+  const clientId = req.params.id;
+  const { action } = req.body;
 
+  try {
+    if (action === 'add') {
+      // Adicione 1 corte ao cliente
+      await clientsModel.addHaircut(clientId, 1);
+    } else if (action === 'remove') {
+      // Remova 1 corte do cliente
+      await clientsModel.removeHaircut(clientId, 1);
+    } else {
+      res.status(400).json({ error: 'Ação inválida' });
+      return;
+    }
 
-
+    res.status(200).json({ message: 'Corte atualizado com sucesso' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erro ao atualizar cortes do cliente' });
+  }
+};
 
 
 module.exports = {
@@ -65,4 +93,5 @@ module.exports = {
   addClient,
   deleteClientById,
   editClientById,
+  updateHaircuts
 };

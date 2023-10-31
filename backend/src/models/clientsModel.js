@@ -3,12 +3,12 @@ const connection = require("./connection");
 
 const bcrypt = require("bcrypt");
 
-const getAll = async () => {
-  const [clients] = await connection.execute("SELECT * FROM clients");
+const getAll = async (adminId) => {
+  const [clients] = await connection.execute("SELECT * FROM clients WHERE adminId = ?", [adminId]);
   return clients;
 };
 
-const addClient = async (clientData) => {
+const addClient = async (clientData, adminId) => {
   const saltsRounds = 10;
   const hash = await bcrypt.hash(clientData.password, saltsRounds);
   const query =
@@ -20,7 +20,7 @@ const addClient = async (clientData) => {
     clientData.dateOfBirthday,
     clientData.phone,
     clientData.haircutsCompleted,
-    clientData.adminId,
+    adminId
   ];
 
   const [addedClient] = await connection.execute(query, values);
@@ -77,10 +77,36 @@ const editClientById = async (clientId, updateFields) => {
   }
 };
 
+const addHaircut = async (clientId) => {
+  const query = "UPDATE clients SET haircutsCompleted = haircutsCompleted + 1 WHERE id = ?";
+  const values = [clientId];
+
+  try {
+    const [result] = await connection.execute(query, values);
+    return result.affectedRows > 0; // Verifica se pelo menos uma linha foi afetada
+  } catch (error) {
+    throw error;
+  }
+};
+
+const removeHaircut = async (clientId) => {
+  const query = "UPDATE clients SET haircutsCompleted = GREATEST(haircutsCompleted - 1, 0) WHERE id = ?";
+  const values = [clientId];
+
+  try {
+    const [result] = await connection.execute(query, values);
+    return result.affectedRows > 0; // Verifica se pelo menos uma linha foi afetada
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   getAll,
   addClient,
   deleteClientById,
   editClientById,
   login,
+  addHaircut,
+  removeHaircut
 };
