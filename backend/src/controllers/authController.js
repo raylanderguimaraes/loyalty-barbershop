@@ -1,5 +1,6 @@
 const adminModel = require("../models/adminModel");
 const clientsModel = require("../models/clientsModel");
+// const routes = require("../routes/routes");
 const jwt = require("jsonwebtoken");
 
 const login = async (req, res) => {
@@ -21,10 +22,11 @@ const login = async (req, res) => {
         { expiresIn: "30min" }
       );
 
+
       if (userType === "admin") {
-        res.status(200).json({ message: "Você logou como admin", token });
+        res.status(200).json({ message: "Logou como Admin", token });
       } else if (userType === "client") {
-        res.status(200).json({ message: "Você logou como cliente", token });
+        res.status(200).json({ message: "Logou como cliente", token });
       }
     } else {
       res.status(401).json({ error: "Credenciais inválidas" });
