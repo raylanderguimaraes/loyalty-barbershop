@@ -4,8 +4,24 @@ const connection = require("./connection");
 const bcrypt = require("bcrypt");
 
 const getAll = async (adminId) => {
-  const [clients] = await connection.execute("SELECT * FROM clients WHERE adminId = ?", [adminId]);
+  const [clients] = await connection.execute(
+    "SELECT id, name, email, dateOfBirthday, phone, haircutsCompleted FROM clients WHERE adminId = ?",
+    [adminId]
+  );
   return clients;
+};
+
+const getClientById = async (clientId) => {
+  const rows = await connection.execute(
+    " SELECT id, name, email, dateOfBirthday, phone, haircutsCompleted FROM clients WHERE id = ?",
+    [clientId]
+  );
+  if (rows.length > 0) {
+    return rows[0];
+  } else {
+    // Se nenhum cliente for encontrado, você pode retornar null ou uma resposta vazia, dependendo do seu caso de uso.
+    return null;
+  }
 };
 
 const addClient = async (clientData, adminId) => {
@@ -20,7 +36,7 @@ const addClient = async (clientData, adminId) => {
     clientData.dateOfBirthday,
     clientData.phone,
     clientData.haircutsCompleted,
-    adminId
+    adminId,
   ];
 
   const [addedClient] = await connection.execute(query, values);
@@ -78,7 +94,8 @@ const editClientById = async (clientId, updateFields) => {
 };
 
 const addHaircut = async (clientId) => {
-  const query = "UPDATE clients SET haircutsCompleted = haircutsCompleted + 1 WHERE id = ?";
+  const query =
+    "UPDATE clients SET haircutsCompleted = haircutsCompleted + 1 WHERE id = ?";
   const values = [clientId];
 
   try {
@@ -90,7 +107,8 @@ const addHaircut = async (clientId) => {
 };
 
 const removeHaircut = async (clientId) => {
-  const query = "UPDATE clients SET haircutsCompleted = GREATEST(haircutsCompleted - 1, 0) WHERE id = ?";
+  const query =
+    "UPDATE clients SET haircutsCompleted = GREATEST(haircutsCompleted - 1, 0) WHERE id = ?";
   const values = [clientId];
 
   try {
@@ -103,10 +121,11 @@ const removeHaircut = async (clientId) => {
 
 module.exports = {
   getAll,
+  getClientById,
   addClient,
   deleteClientById,
   editClientById,
   login,
   addHaircut,
-  removeHaircut
+  removeHaircut,
 };

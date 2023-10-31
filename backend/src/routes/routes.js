@@ -27,6 +27,7 @@ router.post(
   jwtMiddleware.checkToken,
   adminsController.createAdmin
 );
+router.patch("/admin/:id", jwtMiddleware.checkToken, adminsController.editAdmin);
 
 // rota lista todos clients
 router.get("/cliente-dashboard", jwtMiddleware.checkToken, (req, res) => {
@@ -35,8 +36,10 @@ router.get("/cliente-dashboard", jwtMiddleware.checkToken, (req, res) => {
 
 // essa rota lista os clientes baseados no id do admin
 router.get("/clients", jwtMiddleware.checkToken, clientsController.getAll);
+router.get("/client", jwtMiddleware.checkToken, clientsController.getClientById);
 
 // rota que retorna cliente pelo id
+// TODO: configurar essa rota para que quando o cliente efetuar o login, retorne somente as informações referente ao seu ID;
 // router.get(
 //   "client/:id",
 //   jwtMiddleware.checkToken,

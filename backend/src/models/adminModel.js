@@ -39,8 +39,57 @@ const createAdmin = async (adminData) => {
   }
 };
 
+const editAdminById = async (adminId, updateFields) => {
+  const saltsRounds = 10;
+  if (!updateFields || Object.keys(updateFields).length === 0) {
+    throw new Error("Nenhum campo de atualização fornecido.");
+  }
+
+  const fieldNames = Object.keys(updateFields);
+  const fieldValues = [];
+
+  const setClauses = await Promise.all(
+    fieldNames.map(async (fieldName) => {
+      const value = updateFields[fieldName];
+      if (value === undefined || value === null) {
+        throw new Error(
+          `O campo ${fieldName} não pode ser nulo ou indefinido.`
+        );
+      }
+      if (fieldName === "password") {
+        // Hash da senha usando bcrypt
+        const hash = await bcrypt.hash(value, saltsRounds);
+        fieldValues.push(hash);
+        return `${fieldName} = ?`;
+      } else {
+        fieldValues.push(value);
+        return `${fieldName} = ?`;
+      }
+    })
+  );
+
+  const setClause = setClauses.join(", ");
+
+  const query = `
+    UPDATE admin 
+    SET ${setClause}
+    WHERE id = ?
+  `;
+
+  fieldValues.push(adminId);
+
+  try {
+    const [editedAdmin] = await connection.execute(query, fieldValues);
+    return editedAdmin.affectedRows > 0;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 module.exports = {
   getAllAdmins,
   createAdmin,
+  editAdminById,
   login,
 };
