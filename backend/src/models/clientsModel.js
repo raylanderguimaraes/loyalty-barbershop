@@ -67,6 +67,7 @@ const deleteClientById = async (clientId) => {
 };
 
 const editClientById = async (clientId, updateFields) => {
+  const saltsRounds = 10;
   // Checa se algum campo foi alterado
   if (!updateFields || Object.keys(updateFields).length === 0) {
     throw new Error("Nenhum campo de atualização fornecido.");
@@ -75,11 +76,22 @@ const editClientById = async (clientId, updateFields) => {
   // Constroi uma consulta SQL dinamicamente com base nos campos de atualização
   const fieldNames = Object.keys(updateFields);
   const fieldValues = fieldNames.map((fieldName) => updateFields[fieldName]);
-  const setClauses = fieldNames.map((fieldName) => `${fieldName}=?`).join(", ");
+  const setClauses = await Promise.all(
+    fieldNames.map(async (fieldName) => {
+      if (fieldName === "password") {
+        const hash = await bcrypt.hash(updateFields[fieldName], saltsRounds);
+        return `${hash}= ?`;
+      } else {
+        return `${fieldName}=?`;
+      }
+    })
+  );
+
+  const setClause = setClauses.join(", ");
 
   const query = `
     UPDATE clients 
-    SET ${setClauses}
+    SET ${setClause}
     WHERE id = ?
   `;
   const values = [...fieldValues, clientId];

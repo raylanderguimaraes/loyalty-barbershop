@@ -64,7 +64,6 @@ const deleteClientById = async (req, res) => {
 const editClientById = async (req, res) => {
   const clientId = req.params.id;
   const clientData = req.body;
-  console.log(clientId);
   try {
     const isEdited = await clientsModel.editClientById(clientId, clientData);
     if (isEdited) {

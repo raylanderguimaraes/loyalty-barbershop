@@ -58,7 +58,7 @@ router.delete(
   jwtMiddleware.checkToken,
   clientsController.deleteClientById
 );
-router.put(
+router.patch(
   "/admin/clients/:id",
   jwtMiddleware.checkToken,
   clientsController.editClientById
