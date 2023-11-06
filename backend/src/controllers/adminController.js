@@ -17,9 +17,28 @@ const createAdmin = async (req, res) => {
   }
 };
 
+const editAdmin = async (req, res) => {
+  const adminId = req.params.id;
+  const adminData = req.body;
+  console.log(adminId);
+  try {
+    const isEdited = await adminModel.editAdminById(adminId, adminData);
 
+    if (isEdited) {
+      res.status(200).json({ message: "Admin editado com sucesso." });
+    } else {
+      res
+        .status(404)
+        .json({ message: "Admin não encontrado ou não pôde ser editado" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Erro ao editar admin." });
+  }
+};
 
 module.exports = {
   getAllAdmins,
   createAdmin,
+  editAdmin,
 };

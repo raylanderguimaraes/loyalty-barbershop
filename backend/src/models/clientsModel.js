@@ -4,8 +4,26 @@ const connection = require("./connection");
 const bcrypt = require("bcrypt");
 
 const getAll = async (adminId) => {
-  const [clients] = await connection.execute("SELECT * FROM clients WHERE adminId = ?", [adminId]);
+  const [clients] = await connection.execute(
+    "SELECT id, name, email, dateOfBirthday, phone, haircutsCompleted FROM clients WHERE adminId = ?",
+    [adminId]
+  );
   return clients;
+};
+//
+const getClientById = async (clientId) => {
+  const rows = await connection.execute(
+    "SELECT id, name, email, dateOfBirthday, phone, haircutsCompleted FROM clients WHERE id = ?",
+    [clientId]
+  );
+
+  console.log(rows[0]);
+
+  if (rows.length > 0) {
+    return rows[0];
+  } else {
+    return null;
+  }
 };
 
 const addClient = async (clientData, adminId) => {
@@ -20,7 +38,7 @@ const addClient = async (clientData, adminId) => {
     clientData.dateOfBirthday,
     clientData.phone,
     clientData.haircutsCompleted,
-    adminId
+    adminId,
   ];
 
   const [addedClient] = await connection.execute(query, values);
@@ -51,6 +69,7 @@ const deleteClientById = async (clientId) => {
 };
 
 const editClientById = async (clientId, updateFields) => {
+  const saltsRounds = 10;
   // Checa se algum campo foi alterado
   if (!updateFields || Object.keys(updateFields).length === 0) {
     throw new Error("Nenhum campo de atualização fornecido.");
@@ -59,11 +78,22 @@ const editClientById = async (clientId, updateFields) => {
   // Constroi uma consulta SQL dinamicamente com base nos campos de atualização
   const fieldNames = Object.keys(updateFields);
   const fieldValues = fieldNames.map((fieldName) => updateFields[fieldName]);
-  const setClauses = fieldNames.map((fieldName) => `${fieldName}=?`).join(", ");
+  const setClauses = await Promise.all(
+    fieldNames.map(async (fieldName) => {
+      if (fieldName === "password") {
+        const hash = await bcrypt.hash(updateFields[fieldName], saltsRounds);
+        return `${hash}= ?`;
+      } else {
+        return `${fieldName}=?`;
+      }
+    })
+  );
+
+  const setClause = setClauses.join(", ");
 
   const query = `
     UPDATE clients 
-    SET ${setClauses}
+    SET ${setClause}
     WHERE id = ?
   `;
   const values = [...fieldValues, clientId];
@@ -78,7 +108,8 @@ const editClientById = async (clientId, updateFields) => {
 };
 
 const addHaircut = async (clientId) => {
-  const query = "UPDATE clients SET haircutsCompleted = haircutsCompleted + 1 WHERE id = ?";
+  const query =
+    "UPDATE clients SET haircutsCompleted = haircutsCompleted + 1 WHERE id = ?";
   const values = [clientId];
 
   try {
@@ -90,7 +121,8 @@ const addHaircut = async (clientId) => {
 };
 
 const removeHaircut = async (clientId) => {
-  const query = "UPDATE clients SET haircutsCompleted = GREATEST(haircutsCompleted - 1, 0) WHERE id = ?";
+  const query =
+    "UPDATE clients SET haircutsCompleted = GREATEST(haircutsCompleted - 1, 0) WHERE id = ?";
   const values = [clientId];
 
   try {
@@ -103,10 +135,11 @@ const removeHaircut = async (clientId) => {
 
 module.exports = {
   getAll,
+  getClientById,
   addClient,
   deleteClientById,
   editClientById,
   login,
   addHaircut,
-  removeHaircut
+  removeHaircut,
 };

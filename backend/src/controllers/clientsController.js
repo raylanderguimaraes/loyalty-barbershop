@@ -12,6 +12,21 @@ const getAll = async (req, res) => {
   return res.status(200).json(clients);
 };
 
+const getClientById = async (req, res) => {
+  // const clientId = req.params.clientId; // Assumindo que o parâmetro seja "clientId"
+  // const client = await clientsModel.getClientById(clientId);
+
+  // return res.status(200).json(client);
+
+  // const token =
+  //   req.headers.authorization && req.headers.authorization.split(" ")[1];
+  // const decoded = jwt.verify(token, process.env.SECRET);
+  const clientId = req.params.id;
+
+  const client = await clientsModel.getClientById(clientId);
+  return res.status(200).json(client[0]);
+};
+
 const addClient = async (req, res) => {
   const newClientData = req.body;
   try {
@@ -69,29 +84,29 @@ const updateHaircuts = async (req, res) => {
   const { action } = req.body;
 
   try {
-    if (action === 'add') {
+    if (action === "add") {
       // Adicione 1 corte ao cliente
       await clientsModel.addHaircut(clientId, 1);
-    } else if (action === 'remove') {
+    } else if (action === "remove") {
       // Remova 1 corte do cliente
       await clientsModel.removeHaircut(clientId, 1);
     } else {
-      res.status(400).json({ error: 'Ação inválida' });
+      res.status(400).json({ error: "Ação inválida" });
       return;
     }
 
-    res.status(200).json({ message: 'Corte atualizado com sucesso' });
+    res.status(200).json({ message: "Corte atualizado com sucesso" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Erro ao atualizar cortes do cliente' });
+    res.status(500).json({ error: "Erro ao atualizar cortes do cliente" });
   }
 };
 
-
 module.exports = {
   getAll,
+  getClientById,
   addClient,
   deleteClientById,
   editClientById,
-  updateHaircuts
+  updateHaircuts,
 };

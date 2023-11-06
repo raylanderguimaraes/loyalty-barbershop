@@ -27,6 +27,11 @@ router.post(
   jwtMiddleware.checkToken,
   adminsController.createAdmin
 );
+router.patch(
+  "/admin/:id",
+  jwtMiddleware.checkToken,
+  adminsController.editAdmin
+);
 
 // rota lista todos clients
 router.get("/cliente-dashboard", jwtMiddleware.checkToken, (req, res) => {
@@ -35,16 +40,16 @@ router.get("/cliente-dashboard", jwtMiddleware.checkToken, (req, res) => {
 
 // essa rota lista os clientes baseados no id do admin
 router.get("/clients", jwtMiddleware.checkToken, clientsController.getAll);
+router.get(
+  "/client/:id",
+  jwtMiddleware.checkToken,
+  clientsController.getClientById
+);
 
-// rota que retorna cliente pelo id
-// router.get(
-//   "client/:id",
-//   jwtMiddleware.checkToken,
-//   clientsController.getClientById
-// );
+
 
 // rotas para editar os clients
-// criar uma forma de projetger essas rotas, somente o admin poderá acessalas
+
 router.post(
   "/admin/add-client",
   jwtMiddleware.checkToken,
@@ -55,7 +60,7 @@ router.delete(
   jwtMiddleware.checkToken,
   clientsController.deleteClientById
 );
-router.put(
+router.patch(
   "/admin/clients/:id",
   jwtMiddleware.checkToken,
   clientsController.editClientById
