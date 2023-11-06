@@ -10,16 +10,18 @@ const getAll = async (adminId) => {
   );
   return clients;
 };
-
+//
 const getClientById = async (clientId) => {
   const rows = await connection.execute(
-    " SELECT id, name, email, dateOfBirthday, phone, haircutsCompleted FROM clients WHERE id = ?",
+    "SELECT id, name, email, dateOfBirthday, phone, haircutsCompleted FROM clients WHERE id = ?",
     [clientId]
   );
+
+  console.log(rows[0]);
+
   if (rows.length > 0) {
     return rows[0];
   } else {
-    // Se nenhum cliente for encontrado, você pode retornar null ou uma resposta vazia, dependendo do seu caso de uso.
     return null;
   }
 };

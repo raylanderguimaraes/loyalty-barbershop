@@ -18,10 +18,10 @@ const getClientById = async (req, res) => {
 
   // return res.status(200).json(client);
 
-  const token =
-    req.headers.authorization && req.headers.authorization.split(" ")[1];
-  const decoded = jwt.verify(token, process.env.SECRET);
-  const clientId = decoded.id;
+  // const token =
+  //   req.headers.authorization && req.headers.authorization.split(" ")[1];
+  // const decoded = jwt.verify(token, process.env.SECRET);
+  const clientId = req.params.id;
 
   const client = await clientsModel.getClientById(clientId);
   return res.status(200).json(client[0]);
