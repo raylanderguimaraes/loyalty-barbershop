@@ -2,24 +2,26 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Link } from "expo-router";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function Home() {
   return (
     <SafeAreaProvider>
       <View style={styles.container}>
+        <MaterialCommunityIcons name="mustache" size={50} color="white" />
         <Text style={styles.text}>Cartão Fidelidade</Text>
-        <Link href="/login" asChild style={styles.button}>
+
+        <Link href="/signup/login" asChild style={styles.button}>
           <TouchableOpacity>
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
         </Link>
 
-        <Link href="/register" asChild style={styles.button}>
+        <Link href="/signup/register" asChild style={styles.button}>
           <TouchableOpacity>
             <Text style={styles.buttonText}>Registrar</Text>
           </TouchableOpacity>
         </Link>
-        <StatusBar style="auto" />
       </View>
     </SafeAreaProvider>
   );
@@ -37,6 +39,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 25,
     marginBottom: 80,
+    fontWeight: "bold",
   },
   button: {
     width: 300,
