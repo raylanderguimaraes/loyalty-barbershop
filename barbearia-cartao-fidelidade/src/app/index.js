@@ -23,7 +23,9 @@ export default function Home() {
           </TouchableOpacity>
         </Link>
       </View>
+      <StatusBar  />
     </SafeAreaProvider>
+    
   );
 }
 
