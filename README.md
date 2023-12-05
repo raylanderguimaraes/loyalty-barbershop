@@ -8,7 +8,7 @@
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Raylander%20Guimarães%20Ramos-0077B5?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/raylander-guimar%C3%A3es-ramos-3ab363222/)
 
 <img src="./imagens_layout/Captura de tela 2023-11-08 000440.png">
-<img src="./imagens_layout/Captura de tela 2023-11-08 000501.png">
+<img src="./imagens_layout/Captura de tela 2023-12-04 205745.png">
 
 O app em desenvolvimento se trata de um cartão fidelidade digital, pensando em resolver o problema de uma barbearia, no qual faz seu controle de corte grátis dos clientes que acumulam carimbos em seus cartões físicos na barbearia, ao juntar 10 cortes o cliente ganha um corte grátis.
 A idéia é construir uma aplicação no qual o dono da barbearia consiga fazer o controle desses cartões de forma digital, onde ele terá acesso a cadastrar novos clientes, editar suas informações e quantidade de cortes e excluir os clientes;
