@@ -46,8 +46,6 @@ router.get(
   clientsController.getClientById
 );
 
-
-
 // rotas para editar os clients
 
 router.post(

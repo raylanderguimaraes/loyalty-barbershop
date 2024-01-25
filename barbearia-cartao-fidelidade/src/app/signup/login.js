@@ -10,7 +10,7 @@ import {
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import {router} from "expo-router";
+import { router } from "expo-router";
 
 function MyCheckbox({ checked, onPress }) {
   return (
@@ -39,8 +39,15 @@ export default function Login() {
     setUserType(type === userType ? "" : type);
   };
 
+  // As rotas de login estão funcionando somente selecionando o checkbox, colocando um condicional, dependendo do usuário é direcionado para sua tela. Não está sendo validado email e senha ainda do usuário
   const handleLogin = () => {
-    router.push("/dashboard/adminDashboard");
+    if (userType === "barbeiro") {
+      router.push("/dashboardAdmin/adminDashboard");
+    } else if (userType === "cliente") {
+      router.push("/dashboardClient/clientDashboard");
+    } else {
+      console.log("Erro ao efetuar o login");
+    }
   };
 
   return (

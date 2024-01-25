@@ -4,6 +4,7 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -38,6 +39,7 @@ export default function Register() {
       <TouchableOpacity style={styles.button}>
         <Text style={styles.text}>Criar Conta</Text>
       </TouchableOpacity>
+
       <StatusBar style="light" />
     </SafeAreaView>
   );

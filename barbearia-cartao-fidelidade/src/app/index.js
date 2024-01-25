@@ -6,27 +6,25 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function Home() {
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={styles.container}>
-        <View style={styles.menuContainer}>
-          <MaterialCommunityIcons name="mustache" size={50} color="white" />
-          <Text style={styles.text}>Cartão Fidelidade</Text>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.menuContainer}>
+        <MaterialCommunityIcons name="mustache" size={50} color="white" />
+        <Text style={styles.text}>Cartão Fidelidade</Text>
 
-          <Link href="/signup/login" asChild style={styles.button}>
-            <TouchableOpacity>
-              <Text style={styles.buttonText}>Login</Text>
-            </TouchableOpacity>
-          </Link>
+        <Link href="/signup/login" asChild style={styles.button}>
+          <TouchableOpacity>
+            <Text style={styles.buttonText}>Login</Text>
+          </TouchableOpacity>
+        </Link>
 
-          <Link href="/signup/register" asChild style={styles.button}>
-            <TouchableOpacity>
-              <Text style={styles.buttonText}>Registrar</Text>
-            </TouchableOpacity>
-          </Link>
-        </View>
-      </SafeAreaView>
+        <Link href="/signup/register" asChild style={styles.button}>
+          <TouchableOpacity>
+            <Text style={styles.buttonText}>Registrar</Text>
+          </TouchableOpacity>
+        </Link>
+      </View>
       <StatusBar style="light" />
-    </SafeAreaProvider>
+    </SafeAreaView>
   );
 }
 
